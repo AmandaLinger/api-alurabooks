@@ -2,6 +2,7 @@ const fs = require('fs')
 const bodyParser = require('body-parser')
 const jsonServer = require('json-server')
 const jwt = require('jsonwebtoken')
+const https = require('https')
 
 const server = jsonServer.create()
 const router = jsonServer.router('./database.json')
@@ -356,7 +357,20 @@ server.use(/^(?!\/(public|livros|autores|categorias)).*$/, (req, res, next) => {
   }
 })
 
+server.get('/public/docs',(req, res) =>{ // quando o servidor receber um método GET na rota /public/docs, ele executará a arrowFunction
+  const meuHtmml = ` 
+    <h1>Documentação da API </h1>
+    <ul>
+      <li>GET /livros</li>
+      <li>POST /livros</li>
+      <li>GET /catergorias</li>
+    </ul>
+  `
+  res.status(200).contentType("text/html").send(meuHtmml)
+})
+
 server.use(router)
+
 
 server.listen(8000, () => {
   console.log("API disponível em http://localhost:8000")
